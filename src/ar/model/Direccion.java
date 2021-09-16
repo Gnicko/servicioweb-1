@@ -17,4 +17,9 @@ public class Direccion {
  public Map<String, String> toMap() {
   return Map.of("direccion", direccion);
  }
+
+ @Override
+ public String toString() {
+  return "Direccion [direccion=" + direccion + "]";
+ }
 }

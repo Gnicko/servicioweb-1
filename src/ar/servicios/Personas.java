@@ -6,6 +6,8 @@ import ar.model.Persona;
 
 public interface Personas {
 
- List<Persona> personas();
+ List<Persona> personas(String apellido);
+  
+ void crearPersona(String nombre, String apellido, String direccion, String[] telefonos);
 
 }

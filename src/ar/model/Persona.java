@@ -27,6 +27,21 @@ public class Persona {
   this.telefonos.add(new Telefono(numero));
  }
 
+ public void addTelefonos(String[] numeros) {
+  if (numeros == null) {
+   throw new PersonaException("numeros no puede ser null");
+  }
+  if (numeros.length == 0) {
+   throw new PersonaException("numeros debe tener al menos un telefono");
+  }
+  
+  var telefonos = List.of(numeros).stream().map((n) -> {
+   return new Telefono(n);
+  }).collect(Collectors.toList());
+  
+  this.telefonos.addAll(telefonos);
+ }
+ 
  public String nombre() {
   return nombre + " " + apellido;
  }
@@ -50,5 +65,9 @@ public class Persona {
      .collect(Collectors.toList()));
   }
   return map;
+ }
+
+ public boolean containsApellido(String apellido) {
+  return this.apellido.contains(apellido);
  }
 }
