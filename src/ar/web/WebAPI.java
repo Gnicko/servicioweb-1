@@ -20,7 +20,9 @@ public class WebAPI {
  }
 
  public void start() {
-  Javalin app = Javalin.create().start(this.webPort);
+  Javalin app = Javalin.create(config -> {
+   config.enableCorsForAllOrigins();
+  }).start(this.webPort);
   app.get("/personas", traerPersonas());
   app.post("/personas", crearPersona());
 
@@ -54,5 +56,4 @@ public class WebAPI {
 
   };
  }
-
 }
