@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import ar.model.Persona;
+import ar.model.PersonaException;
 import ar.servicios.Personas;
 import io.javalin.Javalin;
 import io.javalin.http.Handler;
@@ -26,8 +27,13 @@ public class WebAPI {
   app.get("/personas", traerPersonas());
   app.post("/personas", crearPersona());
 
-  app.exception(Exception.class, (e, ctx) -> {
+  app.exception(PersonaException.class, (e, ctx) -> {
    ctx.json(Map.of("result", "error", "message", e.getMessage()));
+   // log error in a stream...
+  });  
+  
+  app.exception(Exception.class, (e, ctx) -> {
+   ctx.json(Map.of("result", "error", "message", "Ups... algo se rompió."));
    // log error in a stream...
   });
  }
