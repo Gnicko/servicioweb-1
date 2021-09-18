@@ -14,32 +14,28 @@ public class Persona {
  private Direccion direccion;
 
  public Persona(String nombre, String apellido) {
-  this.nombre = nombre;
-  this.apellido = apellido;
+  this.nombre = new NotNullNotEmpty(nombre).value();
+  this.apellido = new NotNullNotEmpty(apellido).value();
   this.telefonos = new ArrayList<>();
  }
 
  public void addDireccion(String direccion) {
-  this.direccion = new Direccion(direccion);
+  this.direccion = new Direccion(new NotNullNotEmpty(direccion).value());
  }
 
  public void addTelefono(String numero) {
-  this.telefonos.add(new Telefono(numero));
+  this.telefonos.add(new Telefono(new NotNullNotEmpty(numero).value()));
  }
 
  public void addTelefonos(String[] numeros) {
-  if (numeros == null) {
-   throw new PersonaException("numeros no puede ser null");
-  }
-  if (numeros.length == 0) {
-   throw new PersonaException("numeros debe tener al menos un telefono");
-  }
   
-  var telefonos = List.of(numeros).stream().map((n) -> {
+  String[] telefonos = new NotNullNotEmpty(numeros).values();
+  
+  var tel = List.of(telefonos).stream().map((n) -> {
    return new Telefono(n);
   }).collect(Collectors.toList());
   
-  this.telefonos.addAll(telefonos);
+  this.telefonos.addAll(tel);
  }
  
  public String nombre() {
