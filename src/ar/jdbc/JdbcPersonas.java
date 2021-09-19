@@ -37,12 +37,13 @@ public class JdbcPersonas implements Personas {
 
  @Override
  public void crearPersona(String nombre, String apellido,
-   String direccion, String[] telefonos) {
+   String direccion, String[] telefonos, String localidadId) {
 
   Persona p = new Persona(nombre, apellido);
   p.addDireccion(direccion);
   p.addTelefonos(telefonos);
   
   System.out.println(p.toString());
+  System.out.println(localidadId);
  }
 }

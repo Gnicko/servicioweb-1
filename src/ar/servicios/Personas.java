@@ -8,6 +8,6 @@ public interface Personas {
 
  List<Persona> personas(String apellido);
   
- void crearPersona(String nombre, String apellido, String direccion, String[] telefonos);
+ void crearPersona(String nombre, String apellido, String direccion, String[] telefonos, String localidadId);
 
 }
