@@ -10,34 +10,35 @@ public class Persona {
 
  private String nombre;
  private String apellido;
- private List<Telefono> telefonos;
+ private List<Telefono> telefonos = new ArrayList<>();
  private Direccion direccion;
 
- public Persona(String nombre, String apellido) {
-  this.nombre = new NotNullNotEmpty(nombre).value();
-  this.apellido = new NotNullNotEmpty(apellido).value();
-  this.telefonos = new ArrayList<>();
+ public Persona(String nombre, String apellido, String direccion,
+   String[] telefonos) {
+
+  var check = new NotNullNotEmpty("nombre", nombre, "apellido", apellido,
+    "direccion", direccion, "telefonos", telefonos);
+  check.throwOnError();
+  
+  this.nombre = nombre;
+  this.apellido = apellido;
+  this.direccion = new Direccion(direccion);
+
+  this.telefonos.addAll(List.of(telefonos).stream().map((t) -> {
+   return new Telefono(t);
+  }).collect(Collectors.toList()));
  }
 
- public void addDireccion(String direccion) {
-  this.direccion = new Direccion(new NotNullNotEmpty(direccion).value());
- }
+// public void addTelefonos(String[] numeros) {
+//  String[] telefonos = new NotNullNotEmpty("telefono", numeros).values();
+//
+//  var tel = List.of(telefonos).stream().map((n) -> {
+//   return new Telefono(n);
+//  }).collect(Collectors.toList());
+//
+//  this.telefonos.addAll(tel);
+// }
 
- public void addTelefono(String numero) {
-  this.telefonos.add(new Telefono(new NotNullNotEmpty(numero).value()));
- }
-
- public void addTelefonos(String[] numeros) {
-  
-  String[] telefonos = new NotNullNotEmpty(numeros).values();
-  
-  var tel = List.of(telefonos).stream().map((n) -> {
-   return new Telefono(n);
-  }).collect(Collectors.toList());
-  
-  this.telefonos.addAll(tel);
- }
- 
  public String nombre() {
   return nombre + " " + apellido;
  }

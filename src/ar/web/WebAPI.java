@@ -33,7 +33,7 @@ public class WebAPI {
   app.post("/personas", crearPersona());
 
   app.exception(PersonaException.class, (e, ctx) -> {
-   ctx.json(Map.of("result", "error", "message", e.getMessage()));
+   ctx.json(Map.of("result", "error", "errors", e.toMap()));
    // log error in a stream...
   });  
   

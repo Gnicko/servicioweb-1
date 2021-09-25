@@ -8,8 +8,10 @@ public class Localidad {
  private String nombre;
  
  public Localidad(String nombre) {
-  this.nombre = new NotNullNotEmpty(nombre).value();
+  var check = new NotNullNotEmpty("localidad", nombre);
+  check.throwOnError();
   
+  this.nombre = nombre;  
   long leftLimit = 1L;
   long rightLimit = 1000L;
   this.id = leftLimit + (long) (Math.random() * (rightLimit - leftLimit));
@@ -23,5 +25,4 @@ public class Localidad {
  public String toString() {
   return "Localidad [nombre=" + nombre + "]";
  }
- 
 }
