@@ -17,8 +17,8 @@ public class JdbcPersonas implements Personas {
   Persona p3 = new Persona("Ernesto", "Perez");
   
   p1.addDireccion("San Martin 123");
-  p1.addDireccion("Belgrano 34");
-  p1.addDireccion("Bs As 908");
+  p2.addDireccion("Belgrano 34");
+  p3.addDireccion("Bs As 908");
   
   p1.addTelefono("12345678");
   p1.addTelefono("45335678");
