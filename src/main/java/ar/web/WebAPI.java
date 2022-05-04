@@ -4,23 +4,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import ar.model.Localidad;
-import ar.model.Persona;
-import ar.model.PersonaException;
-import ar.servicios.Localidades;
-import ar.servicios.Personas;
+
+import ar.model.Curso;
+import ar.model.Estudiante;
+import ar.model.EstudianteException;
+
+import ar.servicios.Cursos;
+import ar.servicios.Estudiantes;
 import io.javalin.Javalin;
 import io.javalin.http.Handler;
 
 public class WebAPI {
 
- private Personas personas;
- private Localidades localidades;
+ private Estudiantes estudiante;
+ private Cursos cursos;
  private int webPort;
 
- public WebAPI(Localidades localidades, Personas personas, int webPort) {
-  this.personas = personas;
-  this.localidades = localidades;
+ public WebAPI(Cursos cursos, Estudiantes estudiante, int webPort) {
+  this.estudiante = estudiante;
+  this.cursos = cursos;
   this.webPort = webPort;
  }
 
@@ -28,12 +30,12 @@ public class WebAPI {
   Javalin app = Javalin.create(config -> {
    config.enableCorsForAllOrigins();
   }).start(this.webPort);
-  app.get("/personas", traerPersonas());
-  app.get("/localidades", traerLocalidades());
-  app.post("/personas", crearPersona());
+  app.get("/estudiantes", traerEstudiantes());
+  app.get("/cursos", traerCursos());
+  app.post("/estudiantes", crearEstudiante());
 
-  app.exception(PersonaException.class, (e, ctx) -> {
-   ctx.json(Map.of("result", "error", "message", e.getMessage()));
+  app.exception(EstudianteException.class, (e, ctx) -> {
+   ctx.json(Map.of("result", "error", "errors", e.toMap()));
    // log error in a stream...
   });  
   
@@ -43,39 +45,39 @@ public class WebAPI {
   });
  }
 
- private Handler traerLocalidades() {
+ private Handler traerCursos() {
   return ctx -> {
-   var localidades = this.localidades.localidades();
+   var cursos = this.cursos.cursos();
    var list = new ArrayList<Map<String, Object>>();
-   for (Localidad l : localidades) {
-    list.add(l.toMap());
+   for(Curso c:cursos) {
+    list.add(c.toMap());
    }
-   ctx.json(Map.of("result", "success", "localidades", list));
+   ctx.json(Map.of("result", "success", "cursos", list));
   };
  }
 
- private Handler crearPersona() {
+ private Handler crearEstudiante() {
   return ctx -> {
-   PersonaDto dto = ctx.bodyAsClass(PersonaDto.class);
-   this.personas.crearPersona(dto.getNombre(), dto.getApellido(),
-     dto.getDireccion(), dto.getTelefonos(), dto.getLocalidad());
+   EstudianteDto dto = ctx.bodyAsClass(EstudianteDto.class);
+   this.estudiante.crearEstudiante(dto.getNombre(), dto.getApellido(),
+     dto.getCursos());
    ctx.json(Map.of("result", "success"));
   };
  }
 
- private Handler traerPersonas() {
+ private Handler traerEstudiantes() {
   return ctx -> {
    String apellido = ctx.queryParam("apellido");
-   List<Persona> personas = this.personas.personas(apellido);
+   List<Estudiante> estudiantes = this.estudiante.estudiantes(apellido);
 
    var list = new ArrayList<Map<String, Object>>();
 
-   for (Persona p : personas) {
-    list.add(p.toMap());
+   for (Estudiante e : estudiantes) {
+    list.add(e.toMap());
    }
 
-   ctx.json(Map.of("result", "success", "personas", list));
-
+   ctx.json(Map.of("result", "success", "estudiantes", list));
+ 
   };
  }
 }
